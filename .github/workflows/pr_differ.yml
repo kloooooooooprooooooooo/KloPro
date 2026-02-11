@@ -12,4 +12,4 @@ jobs:
       - name: Install draw.io desktop
         run: |
           wget https://github.com/jgraph/drawio-desktop/releases/download/v29.3.6/drawio-amd64-29.3.6.deb
-          apt install ./drawio-amd64-29.3.6.deb
+          sudo apt-get install ./drawio-amd64-29.3.6.deb
