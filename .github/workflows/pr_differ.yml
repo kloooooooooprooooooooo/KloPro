@@ -21,9 +21,12 @@ jobs:
       - name: Convert chart to png
         run: |
           drawio --export --output pr-image.png KloPro.drawio.svg
-      - name: Convert chart on master to png
+      - name: Switch branch
+        uses: actions/checkout@v6
+        with:
+          ref: master
+      - name: Convert chart to png
         run: |
-          git checkout origin/master
           drawio --export --output master-image.png KloPro.drawio.svg
       - name: Diff Images
         run: |
