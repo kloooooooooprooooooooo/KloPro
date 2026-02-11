@@ -13,7 +13,11 @@ jobs:
         run: |
           wget https://github.com/jgraph/drawio-desktop/releases/download/v29.3.6/drawio-amd64-29.3.6.deb
           sudo apt-get install ./drawio-amd64-29.3.6.deb
-          sudo apt-get install imagemagick
+          sudo apt-get install imagemagick xvfb
+      - name: Start Virtual Framebuffer # drawio wont run without a display
+        run: |
+          Xvfb -ac :99 -screen 0 1280x1024x16 &
+          export DISPLAY=:99
       - name: Convert chart to png
         run: |
           drawio --export --output pr-image.png KloPro.drawio.svg
