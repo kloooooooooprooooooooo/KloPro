@@ -1,6 +1,6 @@
 
-name: pr-differ
-on: pull_request
+name: pr-diff
+on: workflow_dispatch
 
 jobs:
   basic:
