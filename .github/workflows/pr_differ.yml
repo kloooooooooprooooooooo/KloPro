@@ -29,6 +29,7 @@ jobs:
         run: |
           drawio --export --output "${{ runner.temp }}/master-image.png" KloPro.drawio.svg
       - name: Diff Images
+        continue-on-error: true # this step sometimes fails without an error message. just keep going.
         run: |
           compare "${{ runner.temp }}/pr-image.png" "${{ runner.temp }}/master-image.png" diff.png
       - name: Upload Diff as Artifact
