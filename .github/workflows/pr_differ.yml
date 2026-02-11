@@ -23,7 +23,7 @@ jobs:
           drawio --export --output pr-image.png KloPro.drawio.svg
       - name: Convert chart on master to png
         run: |
-          git checkout master
+          git checkout origin/master
           drawio --export --output master-image.png KloPro.drawio.svg
       - name: Diff Images
         run: |
