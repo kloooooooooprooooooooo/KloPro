@@ -9,7 +9,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Install draw.io desktop
+      - name: Install dependencies
         run: |
           wget https://github.com/jgraph/drawio-desktop/releases/download/v29.3.6/drawio-amd64-29.3.6.deb
           sudo apt-get install ./drawio-amd64-29.3.6.deb
+          sudo apt-get install imagemagick
+      - name: Convert chart to png
+        run: |
+          drawio --export --output pr-image.png KloPro.drawio.svg
+      - name: Convert chart on master to png
+        run: |
+          git checkout KloPro.drawio.svg master
+          drawio --export --output master-image.png KloPro.drawio.svg
+      - name: Diff Images
+        run: |
+          compare pr-image.png master-image.png diff.png
+      - name: Upload Diff as Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          path: diff.png
+          if-no-files-found: error
+          overwrite: true
+
