@@ -20,17 +20,17 @@ jobs:
           echo "DISPLAY=:99" >> $GITHUB_ENV
       - name: Convert chart to png
         run: |
-          drawio --export --output pr-image.png KloPro.drawio.svg
+          drawio --export --output "${{ runner.temp }}/pr-image.png" KloPro.drawio.svg
       - name: Switch branch
         uses: actions/checkout@v6
         with:
           ref: master
       - name: Convert chart to png
         run: |
-          drawio --export --output master-image.png KloPro.drawio.svg
+          drawio --export --output "${{ runner.temp }}/master-image.png" KloPro.drawio.svg
       - name: Diff Images
         run: |
-          compare pr-image.png master-image.png diff.png
+          compare "${{ runner.temp }}/pr-image.png" "${{ runner.temp }}/master-image.png" diff.png
       - name: Upload Diff as Artifact
         uses: actions/upload-artifact@v6
         with:
