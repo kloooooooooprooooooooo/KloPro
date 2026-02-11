@@ -1,0 +1,40 @@
+
+name: pr-diff
+on: workflow_dispatch
+
+jobs:
+  basic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install dependencies
+        run: |
+          wget https://github.com/jgraph/drawio-desktop/releases/download/v29.3.6/drawio-amd64-29.3.6.deb
+          sudo apt-get install ./drawio-amd64-29.3.6.deb
+          sudo apt-get install imagemagick xvfb
+      - name: Start Virtual Framebuffer # drawio wont run without a display
+        run: |
+          Xvfb -ac :99 -screen 0 1280x1024x16 &
+          echo "DISPLAY=:99" >> $GITHUB_ENV
+      - name: Convert chart to png
+        run: |
+          drawio --export --output "${{ runner.temp }}/pr-image.png" KloPro.drawio.svg
+      - name: Switch branch
+        uses: actions/checkout@v6
+        with:
+          ref: master
+      - name: Convert chart to png
+        run: |
+          drawio --export --output "${{ runner.temp }}/master-image.png" KloPro.drawio.svg
+      - name: Diff Images
+        run: |
+          compare "${{ runner.temp }}/pr-image.png" "${{ runner.temp }}/master-image.png" diff.png
+      - name: Upload Diff as Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          path: diff.png
+          if-no-files-found: error
+          overwrite: true
+
