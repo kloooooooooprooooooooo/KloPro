@@ -17,7 +17,7 @@ jobs:
       - name: Start Virtual Framebuffer # drawio wont run without a display
         run: |
           Xvfb -ac :99 -screen 0 1280x1024x16 &
-          export DISPLAY=:99
+          echo "DISPLAY=:99" >> $GITHUB_ENV
       - name: Convert chart to png
         run: |
           drawio --export --output pr-image.png KloPro.drawio.svg
